@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="StationeryDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Carts">
+    <Key>
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="StationeryID" />
+    </Key>
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="StationeryID" Type="int" Nullable="false" />
+    <Property Name="Quantity" Type="int" />
+  </EntityType>
+  <EntityType Name="Stationeries">
+    <Key>
+      <PropertyRef Name="StationeryID" />
+    </Key>
+    <Property Name="StationeryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StationeryName" Type="varchar" MaxLength="50" />
+    <Property Name="StationeryPrice" Type="int" />
+  </EntityType>
+  <EntityType Name="TransactionDetails">
+    <Key>
+      <PropertyRef Name="TransactionID" />
+      <PropertyRef Name="StationeryID" />
+    </Key>
+    <Property Name="TransactionID" Type="int" Nullable="false" />
+    <Property Name="StationeryID" Type="int" Nullable="false" />
+    <Property Name="Quantity" Type="int" />
+  </EntityType>
+  <EntityType Name="TransactionHeaders">
+    <Key>
+      <PropertyRef Name="TransactionID" />
+    </Key>
+    <Property Name="TransactionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="TransactionDate" Type="date" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" />
+    <Property Name="UserGender" Type="varchar" MaxLength="6" />
+    <Property Name="UserDOB" Type="date" />
+    <Property Name="UserPhone" Type="varchar" MaxLength="15" />
+    <Property Name="UserAddress" Type="varchar" MaxLength="100" />
+    <Property Name="UserPassword" Type="varchar" MaxLength="50" />
+    <Property Name="UserRole" Type="varchar" MaxLength="10" />
+  </EntityType>
+  <Association Name="FK_Carts_ToStationeries">
+    <End Role="Stationeries" Type="Self.Stationeries" Multiplicity="1" />
+    <End Role="Carts" Type="Self.Carts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Stationeries">
+        <PropertyRef Name="StationeryID" />
+      </Principal>
+      <Dependent Role="Carts">
+        <PropertyRef Name="StationeryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Carts_ToUsers">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="Carts" Type="Self.Carts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Carts">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TransactionDetails_ToStationeries">
+    <End Role="Stationeries" Type="Self.Stationeries" Multiplicity="1" />
+    <End Role="TransactionDetails" Type="Self.TransactionDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Stationeries">
+        <PropertyRef Name="StationeryID" />
+      </Principal>
+      <Dependent Role="TransactionDetails">
+        <PropertyRef Name="StationeryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TransactionDetails_ToTransactionHeaders">
+    <End Role="TransactionHeaders" Type="Self.TransactionHeaders" Multiplicity="1" />
+    <End Role="TransactionDetails" Type="Self.TransactionDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TransactionHeaders">
+        <PropertyRef Name="TransactionID" />
+      </Principal>
+      <Dependent Role="TransactionDetails">
+        <PropertyRef Name="TransactionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TransactionHeaders_ToUsers">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="TransactionHeaders" Type="Self.TransactionHeaders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="TransactionHeaders">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="StationeryDBModelStoreContainer">
+    <EntitySet Name="Carts" EntityType="Self.Carts" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Stationeries" EntityType="Self.Stationeries" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TransactionDetails" EntityType="Self.TransactionDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TransactionHeaders" EntityType="Self.TransactionHeaders" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Carts_ToStationeries" Association="Self.FK_Carts_ToStationeries">
+      <End Role="Stationeries" EntitySet="Stationeries" />
+      <End Role="Carts" EntitySet="Carts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Carts_ToUsers" Association="Self.FK_Carts_ToUsers">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Carts" EntitySet="Carts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TransactionDetails_ToStationeries" Association="Self.FK_TransactionDetails_ToStationeries">
+      <End Role="Stationeries" EntitySet="Stationeries" />
+      <End Role="TransactionDetails" EntitySet="TransactionDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TransactionDetails_ToTransactionHeaders" Association="Self.FK_TransactionDetails_ToTransactionHeaders">
+      <End Role="TransactionHeaders" EntitySet="TransactionHeaders" />
+      <End Role="TransactionDetails" EntitySet="TransactionDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TransactionHeaders_ToUsers" Association="Self.FK_TransactionHeaders_ToUsers">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="TransactionHeaders" EntitySet="TransactionHeaders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
